@@ -3,7 +3,7 @@ project:
 
 book:
   title: "flowML"
-  author: "Jane Doe"
+  author: "Yao-Chung"
   date: "8/10/2022"
   chapters:
     - index.qmd

@@ -1,5 +1,5 @@
 # Preface {.unnumbered}
 
-This is a Quarto book.
+This book includes the notes I learn to do machine learning on flow cytometry (FC) data.
 
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
+The source code can be found at <https://github.com/ferygood/flowML>.
