@@ -8,6 +8,9 @@ book:
   chapters:
     - index.qmd
     - intro.qmd
+    - part: posts/openCyto/intro.qmd
+      chapters: 
+        - posts/openCyto/index.qmd
     - summary.qmd
     - references.qmd
 

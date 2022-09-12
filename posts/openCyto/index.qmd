@@ -1,0 +1,87 @@
+# Manual gating {.unnumbered}
+
+The [**oepnCyto** package](http://opencyto.org/) is designed to facilitate the application of automated gating methods in a sequential way to mimic the construction of a manual gating scheme.
+
+In the past, scientist need to use manual gating method on FC data using **`flowJo`** package. However, it is time consuming and not applicable for high-throughput FC data.
+
+### Automated Gating
+
+1.  `flowCore`, `flowStats`, `flowClust` and other packages provide many different gating methods to detect cell populations and draw gates automatically.
+
+2.  `flowWorkspace` package provide the `GatingSet` as an efficient data structure to store, query and visualize the hierarchical gated data.
+
+3.  Taking the advantage of the tools mentioned in 1. and 2. `openCyto` can create the automated gating pipeline by a `gatingTeplate`, which is essentially the same kind of hierarchical gating scheme used by scientist.
+
+Below we create an **example gating template**,
+
+```{r}
+library(openCyto)
+library(data.table)
+library(flowWorkspace)
+
+gtFile <- system.file("extdata/gating_template/tcell.csv", package="openCyto")
+dtTemplate <- fread(gtFile)
+dtTemplate
+```
+
+template format
+
+-   `alias`: a name used to label the cell population, with
+    the path composed of the alias and its precedent nodes (e.g.
+    /root/A/B/alias) being uniquely identifiable.
+
+-   `pop`: population patterns of `+/-` or `+/-+/-`, which tell the algorithm which side (postive or negative) of a 1-D gate or which quadrant of a 2-D gate are to be kept.
+
+-   `parent`: the parent population alias, whose path also has to be uniquely identifiable.
+
+-   `dims`: characters seperated by commas specifying the
+    dimensions (1-D or 2-D) used for gating. These can be either channel
+    names or stained marker names.
+
+-   `gating_method`: the name of the gating function (e.g. `flowClust`). It is invoked by a wrapper function that has the identical function name prefixed with a dot.(e.g. `.flowClust`)
+
+-   `gating_args`: the named arguments passed to the gating function
+
+-   `collapseDataForGating`: When TRUE, data is collapsed (within groups if `groupBy` is specified) before gating and the gate is replicated across collapsed samples.
+    When set FALSE (or blank), the `groupBy` argument is only used by `preprocessing` and ignored by gating.
+
+-   `groupBy`: If provided, samples are split into groups by
+    the unique combinations of the named study variable (i.e. column names
+    of pData, e.g.\"PTID:VISITNO\").
+    When this is numeric (N), samples are grouped by every N samples
+
+-   `preprocessing_method`: the name of the preprocessing function (e.g. `prior_flowClust`). It is invoked by a wrapper function that has the identical function name prefixed with a dot (e.g. `.prior_flowClust`).
+    The preprocessing results are then passed to the appropriate gating wrapper function through its `pps_res` argument.
+
+-   `preprocessing_args`: the named arguments passed to the preprocessing function.
+
+### Load gating template
+
+```{r}
+gt_tcell <- gatingTemplate(gtFile)
+gt_tcell
+```
+
+```{r}
+plot(gt_tcell)
+```
+
+As we can see, the gating scheme has been expanded as we described above. All the **colored** arrows source from a parent population and the **grey** arrows source from a reference population.
+
+### Run the gating pipeline
+
+```{r eval=FALSE}
+fcsFiles <- list.files(pattern = "CytoTrol", flowDataPath, full=TRUE)
+cs <- load_cytoset_from_fcs(fcsFiles)
+cf <- realize_view(cs[[1]])
+gs <- GatingSet(cs)
+gs
+```
+
+### Compensation
+
+### Transformation
+
+### Gating
+
+### Hide nodes

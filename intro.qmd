@@ -4,7 +4,7 @@
 
 There is no better way to learn than to do. Here we learn how to analyze FC data using a popular bioconductor package called [flowCore](https://www.bioconductor.org/packages/release/bioc/html/flowCore.html).
 
-In this chapter, we will try to cover all the major concepts from [How-To-flowCore](https://www.bioconductor.org/packages/release/bioc/vignettes/flowCore/inst/doc/HowTo-flowCore.pdf). 
+In this chapter, we will try to cover all the major concepts from [How-To-flowCore](https://www.bioconductor.org/packages/release/bioc/vignettes/flowCore/inst/doc/HowTo-flowCore.pdf).
 
 flowCore package is that of using a standardized representation that will insure compatibility with existing technologies for data analysis and will support collaboration and interoperability of new methods as they are developed. flowCore adapts `expressionSet` and `AnnotateDataFrame` structures which are familiar to most Bioconductor users.
 
@@ -15,11 +15,13 @@ BiocManager::install("flowCore")
 ```
 
 Load required library
+
 ```{r}
 library(flowCore)
 ```
 
 ## reading an FCS file into a flowFrame
+
 ```{r}
 file.name <- system.file("extdata", "0877408774.B08",
                          package="flowCore")
@@ -35,25 +37,24 @@ head(x)
 str(x)
 ```
 
-
 ```{r}
 keyword(x, c("$P1E", "$P2E", "$P3E", "$P4E"))
 ```
 
-The default "linearize" transformation option will convert these to, effectively, have a $PnE value of "0,0":
+The default "linearize" transformation option will convert these to, effectively, have a \$PnE value of "0,0":
+
 ```{r}
 summary(read.FCS(file.name))
 ```
 
 scale transformation
+
 ```{r}
 summary(read.FCS(file.name, transformation="scale"))
 ```
 
 Another parameter of interest is the alter.names parameter, which will convert the parameter names into more "R friendly" qauivalents, usually by replacing "-" with ".";
+
 ```{r}
 read.FCS(file.name, alter.names=TRUE)
 ```
-
-
-
